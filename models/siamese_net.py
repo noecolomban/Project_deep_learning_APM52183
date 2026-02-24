@@ -1,12 +1,15 @@
 from typing import Tuple
-from numpy import isin
-
+from numpy.lib.arraysetops import isin
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from models.base_model import Simple_Node_Embedding
 
-from models.gated_gcn import GatedGCNNet_Node, GatedGCNNet_Edge
+try:
+    from models.gated_gcn import GatedGCNNet_Node, GatedGCNNet_Edge
+except (ImportError, FileNotFoundError):
+    GatedGCNNet_Node = None
+    GatedGCNNet_Edge = None
 
 class Siamese_Model(nn.Module):
     def __init__(self, original_features_num, num_blocks, in_features,out_features, depth_of_mlp, embedding_class=Simple_Node_Embedding):
@@ -51,9 +54,9 @@ class Siamese_Model_Gen(nn.Module):
         self.model=''
         super().__init__()
         self.node_embedder = Model_class(**kwargs)
-        if isinstance(self.node_embedder,GatedGCNNet_Node):
+        if GatedGCNNet_Node is not None and isinstance(self.node_embedder,GatedGCNNet_Node):
             self.model='gatedgcnnode'
-        elif isinstance(self.node_embedder,GatedGCNNet_Edge):
+        elif GatedGCNNet_Edge is not None and isinstance(self.node_embedder,GatedGCNNet_Edge):
             self.model='gatedgcnedge'
 
     def forward(self,x):

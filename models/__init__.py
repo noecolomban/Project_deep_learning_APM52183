@@ -1,7 +1,5 @@
 from models.siamese_net import Siamese_Model,Siamese_Model_Gen
 from models.base_model import Simple_Node_Embedding, Simple_Edge_Embedding, RS_Node_Embedding
-from models.gcn_model import BaseGCN
-from models.gated_gcn import GatedGCN, GatedGCNNet_Edge, GatedGCNNet_Node
 
 # def get_model(args):
 
@@ -71,16 +69,23 @@ def get_model_gen(args):
     fgnn_embedding_dict = {'node': Simple_Node_Embedding, 
         'rs_node': RS_Node_Embedding,
         'edge': Simple_Edge_Embedding}
-    gatedgcn_embedding_dict = {'node': GatedGCNNet_Node, 'edge': GatedGCNNet_Edge}
-
     if arch=='fgnn':
         try:
             Model_instance = fgnn_embedding_dict[embedding]
         except KeyError:
             raise NotImplementedError(f"{embedding} is not a keyword for the FGNN architecture (should be 'node' or 'edge'")
     elif arch=='gcn':
+        from models.gcn_model import BaseGCN
         Model_instance = BaseGCN
     elif arch=='gatedgcn':
+        try:
+            from models.gated_gcn import GatedGCNNet_Edge, GatedGCNNet_Node
+        except (ImportError, FileNotFoundError) as exc:
+            raise ImportError(
+                "The gatedgcn architecture requires DGL and its native dependencies. "
+                "Install a compatible DGL build for your environment before using arch_gnn='gatedgcn'."
+            ) from exc
+        gatedgcn_embedding_dict = {'node': GatedGCNNet_Node, 'edge': GatedGCNNet_Edge}
         try:
             Model_instance = gatedgcn_embedding_dict[embedding]
         except KeyError:

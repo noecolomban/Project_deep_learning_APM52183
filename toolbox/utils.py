@@ -9,8 +9,12 @@ import numpy as np
 from scipy.spatial.distance import cdist
 from scipy.optimize import linear_sum_assignment
 from networkx import to_numpy_array as nx_to_numpy_array
-import dgl as dgl
 import torch.backends.cudnn as cudnn
+
+try:
+    import dgl as dgl
+except (ImportError, FileNotFoundError):
+    dgl = None
 
 # create directory if it does not exist
 def check_dir(dir_path):
@@ -176,7 +180,12 @@ def edge_features_to_dense_sym_features(graph, features, device='cpu'):
     t_features = t.reshape((N**2,n_features))
     return t_features
 
-def edge_tensor_to_features(graph: dgl.DGLGraph, features: torch.Tensor, device='cpu'):
+def edge_tensor_to_features(graph: "dgl.DGLGraph", features: torch.Tensor, device='cpu'):
+    if dgl is None:
+        raise ImportError(
+            "edge_tensor_to_features requires DGL and its native dependencies. "
+            "Install a compatible DGL build for your environment."
+        )
     n_edges = graph.number_of_edges()
     resqueeze = False
     if len(features.shape)==3:
