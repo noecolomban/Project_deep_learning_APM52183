@@ -1,5 +1,6 @@
 from typing import Tuple
-from numpy.lib.arraysetops import isin
+from numpy import isin
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
