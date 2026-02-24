@@ -1,0 +1,23 @@
+#Custom
+*.np
+*.npz
+*.png
+*.pt
+*.py.swp
+.ipynb_checkpoints/
+dataset*/
+runs/
+interpretation/
+temp/
+.neptune/
+*.json
+*.pkl
+
+#pyconcorde residual files
+*.res
+*.sol
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
