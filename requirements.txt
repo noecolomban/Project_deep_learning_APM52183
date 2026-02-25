@@ -4,10 +4,10 @@ networkx
 pytest
 sacred
 PyYAML
-#neptune-contrib
+neptune-contrib
 psutil
 Cython
-scikit-learn
+sklearn
 tqdm
 seaborn
 pandas

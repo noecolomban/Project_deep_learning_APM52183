@@ -13,12 +13,8 @@ from sklearn.decomposition import PCA
 from numpy.random import default_rng
 import tqdm
 from numpy import mgrid as npmgrid
+import dgl
 from numpy import indices as npindices, argpartition as npargpartition, array as nparray
-
-try:
-    import dgl
-except (ImportError, FileNotFoundError):
-    dgl = None
 
 #try:
 #    from concorde.tsp import TSPSolver
@@ -36,10 +32,6 @@ def is_adj(matrix):
     return torch.all((matrix==0) + (matrix==1))
 
 def _connectivity_to_dgl_adj(connectivity):
-    if dgl is None:
-        raise ImportError(
-            "DGL conversion requested but DGL and its native dependencies are not available."
-        )
     assert len(connectivity.shape)==3, "Should have a shape of N,N,2"
     adj = connectivity[:,:,1] #Keep only the adjacency (discard node degree)
     N,_ = adj.shape
@@ -53,10 +45,6 @@ def _connectivity_to_dgl_adj(connectivity):
     return gdgl
 
 def _dgl_adj_to_connectivity(dglgraph):
-    if dgl is None:
-        raise ImportError(
-            "DGL conversion requested but DGL and its native dependencies are not available."
-        )
     N = len(dglgraph.nodes())
     connectivity = torch.zeros((N,N,2))
     edges = dglgraph.edges()
@@ -72,10 +60,6 @@ def _connectivity_to_dgl_edge(connectivity,sparsify=False):
     """Converts a connectivity tensor to a dgl graph with edge and node features.
     if 'sparsify' is specified, it should be an integer : the number of closest nodes to keep
     """
-    if dgl is None:
-        raise ImportError(
-            "DGL conversion requested but DGL and its native dependencies are not available."
-        )
     assert len(connectivity.shape)==3, "Should have a shape of N,N,2"
     N,_,_ = connectivity.shape
     distances = connectivity[:,:,1]
@@ -233,16 +217,16 @@ class Base_Generator(torch.utils.data.Dataset):
             l_data = self.create_dataset()
             print('Saving dataset at {}'.format(path))
             torch.save(l_data, path)
+            print('Creating dataset at {}'.format(path_dgl))
+            print("Converting data to DGL format")
+            l_data_dgl = []
+            for data,target in tqdm.tqdm(l_data):
+                elt_dgl = connectivity_to_dgl(data)
+                l_data_dgl.append((elt_dgl,target))
+            print("Conversion ended.")
+            print('Saving dataset at {}'.format(path_dgl))
+            torch.save(l_data_dgl, path_dgl)
             if use_dgl:
-                print('Creating dataset at {}'.format(path_dgl))
-                print("Converting data to DGL format")
-                l_data_dgl = []
-                for data,target in tqdm.tqdm(l_data):
-                    elt_dgl = connectivity_to_dgl(data)
-                    l_data_dgl.append((elt_dgl,target))
-                print("Conversion ended.")
-                print('Saving dataset at {}'.format(path_dgl))
-                torch.save(l_data_dgl, path_dgl)
                 self.data = l_data_dgl
             else:
                 self.data = l_data

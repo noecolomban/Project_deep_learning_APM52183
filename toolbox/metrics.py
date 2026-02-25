@@ -1,5 +1,5 @@
 import numpy as np
-from numpy.lib.arraysetops import isin
+from numpy import isin
 import torch
 from scipy.optimize import linear_sum_assignment
 from torch.nn.modules.activation import Sigmoid, Softmax

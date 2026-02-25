@@ -3,14 +3,10 @@ import toolbox.maskedtensor as maskedtensor
 from torch.utils.data import DataLoader
 from toolbox.utils import get_device
 #from data_generator import DGL_Loader
+import dgl
 import torch
 from collections.abc import Iterable
 from math import sqrt
-
-try:
-    import dgl
-except (ImportError, FileNotFoundError):
-    dgl = None
 
 def collate_fn(samples_list):
     input1_list = [input1 for input1, _ in samples_list]
@@ -20,8 +16,6 @@ def collate_fn(samples_list):
     return input1, input2
 
 def _collate_fn_dgl_qap(samples_list):
-    if dgl is None:
-        raise ImportError("DGL collation requested but DGL is not available.")
     input1_list = [input1 for (input1, _),_ in samples_list]
     input2_list = [input2 for (_, input2),_ in samples_list]
     input1_batch = dgl.batch(input1_list)
@@ -29,8 +23,6 @@ def _collate_fn_dgl_qap(samples_list):
     return ((input1_batch,input2_batch),torch.empty(1))
 
 def _collate_fn_dgl_ne(samples_list):
-    if dgl is None:
-        raise ImportError("DGL collation requested but DGL is not available.")
     bs = len(samples_list)
     input1_list = [input1 for (input1, _) in samples_list]
     target_list = [target for (_,target) in samples_list]
