@@ -54,5 +54,6 @@ arch: # Architecture and model
 
 observers:
     neptune:
-        enable: Yes
+        #enable: Yes
+        enable: No
         project: mlelarge/GNN-res

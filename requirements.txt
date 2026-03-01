@@ -7,7 +7,7 @@ PyYAML
 neptune-contrib
 psutil
 Cython
-sklearn
+scikit-learn
 tqdm
 seaborn
 pandas
