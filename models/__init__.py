@@ -2,6 +2,7 @@ from models.siamese_net import Siamese_Model,Siamese_Model_Gen, SiameseMGNN
 from models.base_model import Simple_Node_Embedding, Simple_Edge_Embedding, RS_Node_Embedding
 from models.gcn_model import BaseGCN
 from models.gated_gcn import GatedGCN, GatedGCNNet_Edge, GatedGCNNet_Node
+from models.MGNN_net import MGNN
 
 # def get_model(args):
 
@@ -89,7 +90,7 @@ def get_model_gen(args):
     elif arch == 'mgnn':
         # Le MGNN fait du Message Passing sur les noeuds, on force donc l'embedding 'node'
         if embedding in ('node', 'rs_node'):
-            Model_instance = SiameseMGNN  # Remplacez par le nom exact de votre classe
+            Model_instance = MGNN  # Remplacez par le nom exact de votre classe
         else:
             raise NotImplementedError(f"Pour le MGNN, seul l'embedding 'node' est logique/implémenté. '{embedding}' reçu.")
         

@@ -17,7 +17,7 @@ data:
         noise_model: ErdosRenyi
         edge_density: 0.0015
         vertex_proba: 1. # Parameter of the binomial distribution of vertices
-        noise: 0.1
+        noise: 0.15
             
     test: #Test data generation parameters
         num_examples_test: 1000
