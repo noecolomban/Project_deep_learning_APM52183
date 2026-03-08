@@ -90,9 +90,14 @@ def get_model_gen(args):
     elif arch == 'mgnn':
         # Le MGNN fait du Message Passing sur les noeuds, on force donc l'embedding 'node'
         if embedding in ('node', 'rs_node'):
-            Model_instance = MGNN  # Remplacez par le nom exact de votre classe
-        else:
-            raise NotImplementedError(f"Pour le MGNN, seul l'embedding 'node' est logique/implémenté. '{embedding}' reçu.")
+            
+            # --- MODIFICATION POUR LE MGNN SIAMOIS ---
+            if arch_load == 'siamese':
+                # On remplace le loader générique par votre classe SiameseMGNN qui a le paramètre "tau"
+                loader_function = lambda model, *args, **kwargs: SiameseMGNN(**kwargs)
+                Model_instance = None # Pas besoin car SiameseMGNN instancie lui-même le MGNN
+            else:
+                Model_instance = MGNN
         
 
     else:
