@@ -1,4 +1,4 @@
-from models.siamese_net import Siamese_Model,Siamese_Model_Gen, SiameseMGNN
+from models.siamese_net import Siamese_Model,Siamese_Model_Gen
 from models.base_model import Simple_Node_Embedding, Simple_Edge_Embedding, RS_Node_Embedding
 from models.gcn_model import BaseGCN
 from models.gated_gcn import GatedGCN, GatedGCNNet_Edge, GatedGCNNet_Node
