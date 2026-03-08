@@ -5,7 +5,6 @@ from models.gated_gcn import GatedGCN, GatedGCNNet_Edge, GatedGCNNet_Node
 from models.MGNN_net import MGNN
 
 # def get_model(args):
-
 #     args_dict = {'arch_type': args['arch_type'],
 #                 'original_features_num': args['original_features_num'],
 #                 'num_blocks': args['num_blocks'],
