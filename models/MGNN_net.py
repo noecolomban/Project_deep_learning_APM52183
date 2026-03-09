@@ -10,14 +10,14 @@ class MGNNLayer(nn.Module):
     """
     def __init__(self, in_features, out_features):
         super().__init__()
-        self.Wmsg = nn.Linear(in_features, out_features, bias=False)
-        self.Wself = nn.Linear(in_features, out_features, bias=True)
+        self.msg_proj = nn.Linear(in_features, out_features, bias=False)
+        self.self_proj = nn.Linear(in_features, out_features, bias=True)
         
     def forward(self, h, A):
         # h: (bs, n_vertices, in_features)
         # A: (bs, n_vertices, n_vertices)
-        msg = torch.bmm(A, self.Wmsg(h))
-        self_loop = self.Wself(h)
+        msg = torch.bmm(A, self.msg_proj(h))
+        self_loop = self.self_proj(h)
         return msg + self_loop
 
 
