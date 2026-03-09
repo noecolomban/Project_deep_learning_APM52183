@@ -4,7 +4,7 @@ cpu: No
 #root_dir: 'experiments-gnn' # not used...
 problem: 'qap' 
 test_enabled: Yes
-use_dgl: No
+use_dgl: Yes
 #path_dataset: data # Path where datasets are stored, default data/
 
 data:
@@ -43,7 +43,7 @@ train: # Training parameters
     start_model: '/home/mlelarge/experiments-gnn/qap/qap_res/gatedgcn_8_ErdosRenyi_64_0.09375/02-11-22-20-55/model_best.pth.tar' #'/home/mlelarge/experiments-gnn/qap/qap_res/fgnn_4_ErdosRenyi_64_0.09375/02-11-22-09-31/model_best.pth.tar'
 
 arch: # Architecture and model
-    arch_gnn: fgnn #fgnn, gcn, gatedgcn
+    arch_gnn: gcn #fgnn, gcn, gatedgcn
     arch_load: siamese #siamese or simple
     embedding: rs_node #node or edge, rs_node
     num_blocks: 4 #4
