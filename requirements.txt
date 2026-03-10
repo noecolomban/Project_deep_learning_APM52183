@@ -11,3 +11,4 @@ scikit-learn
 tqdm
 seaborn
 pandas
+numpy<2.0.0
