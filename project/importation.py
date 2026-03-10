@@ -101,3 +101,14 @@ def compute_quant(all_acc,quant_low=0.1,quant_up=0.9):
     for i in range(num):
         q_acc[i,:] = np.quantile(all_acc[i,:],[quant_up, quant_low])
     return mean_acc, q_acc
+
+def compute_all_with_metric(list_noise, args, path_dataset, model, criterion, device, metric_fn, bs=50):
+    num_batches = math.ceil(args['num_examples_test'] / bs)
+    all_acc = np.zeros((len(list_noise), args['num_examples_test']))
+    for i, noise in enumerate(list_noise):
+        args['noise'] = noise
+        gene_test = QAP_Generator('test', args, path_dataset)
+        gene_test.load_dataset()
+        test_loader = siamese_loader(gene_test, bs, gene_test.constant_n_vertices)
+        _, all_acc[i, :] = all_losses_acc(test_loader, model, criterion, device, eval_score=metric_fn)
+    return all_acc
